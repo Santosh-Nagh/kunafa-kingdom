@@ -1,0 +1,141 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id         String    @id @default(uuid())
+  name       String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  products   Product[]
+}
+
+model Charge {
+  id         String    @id @default(uuid())
+  name       String
+  amount     Float
+  is_taxable Boolean   @default(false)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  applied    OrderAppliedCharge[]
+}
+
+model Inventory {
+  id            String          @id @default(uuid())
+  variantId     String
+  storeId       String
+  quantity      Int
+  min_threshold Int             @default(0)
+  updated_at    DateTime        @updatedAt
+
+  variant ProductVariant @relation(fields: [variantId], references: [id])
+  store   Store          @relation(fields: [storeId], references: [id])
+}
+
+model Order {
+  id                                String                 @id @default(uuid())
+  storeId                           String
+  customer_name                     String?
+  customer_phone                    String?
+  aggregator_id                     String?
+  subtotal                          Float
+  applied_charges_amount_taxable    Float                  @default(0)
+  applied_charges_amount_nontaxable Float                  @default(0)
+  discount_amount                   Float                  @default(0)
+  taxable_amount                    Float
+  cgst_amount                       Float                  @default(0)
+  sgst_amount                       Float                  @default(0)
+  total_amount                      Float
+  payment_method                    String
+  amount_received                   Float?
+  change_given                      Float?
+  payment_status                    String                 @default("Pending")
+  order_status                      String                 @default("Received")
+  notes                             String?
+  created_at                        DateTime               @default(now())
+  updated_at                        DateTime               @updatedAt
+
+  store           Store                   @relation(fields: [storeId], references: [id])
+  items           OrderItem[]
+  applied_charges OrderAppliedCharge[]
+}
+
+model OrderAppliedCharge {
+  id             String    @id @default(uuid())
+  orderId        String
+  chargeId       String
+  amount_charged Float
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  order  Order   @relation(fields: [orderId], references: [id])
+  charge Charge @relation(fields: [chargeId], references: [id])
+}
+
+model OrderItem {
+  id          String    @id @default(uuid())
+  orderId     String
+  variantId   String
+  quantity    Int
+  unit_price  Float
+  total_price Float
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  order   Order          @relation(fields: [orderId], references: [id])
+  variant ProductVariant @relation(fields: [variantId], references: [id])
+}
+
+model Product {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  image_url   String?
+  is_active   Boolean         @default(true)
+  created_at  DateTime        @default(now())
+  updated_at  DateTime        @updatedAt
+  categoryId  String
+
+  category Category        @relation(fields: [categoryId], references: [id])
+  variants ProductVariant[]
+}
+
+model ProductVariant {
+  id                       String    @id @default(uuid())
+  name                     String
+  price                    Float
+  sku                      String?
+  inventoryTrackingMethod  InventoryTrackingMethod @default(TrackedBatch)
+  created_at               DateTime  @default(now())
+  updated_at               DateTime  @updatedAt
+  productId                String
+
+  product   Product     @relation(fields: [productId], references: [id])
+  inventory Inventory[]
+  items     OrderItem[]
+}
+
+model Store {
+  id           String      @id @default(uuid())
+  name         String
+  address      String?
+  phone_number String?
+  gstin        String?
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+
+  inventory Inventory[]
+  orders    Order[]
+}
+
+enum InventoryTrackingMethod {
+  TrackedBatch
+  MadeToOrder
+}
