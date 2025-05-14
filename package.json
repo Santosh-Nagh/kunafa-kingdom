@@ -16,7 +16,6 @@
     "react-dom": "^19.0.0",
     "zod": "^3.24.4",
 
-    "tailwindcss": "^4.1.6",
     "postcss": "^8.5.3",
     "autoprefixer": "^10.4.21",
     "@tailwindcss/postcss": "^4.1.6"
@@ -28,9 +27,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "^5",
-
-    "@tailwindcss/cli": "^4.1.6",
-    "tailwindcss-cli": "^0.1.2"
+    "typescript": "^5"
   }
 }
