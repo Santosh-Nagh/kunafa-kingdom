@@ -66,8 +66,12 @@ function OrderPage() {
       setSubmitted(true);
       dispatch({ type: 'RESET_ORDER' });
     } catch (err) {
-      alert('Error: ' + err.message);
-    } finally {
+      if (err instanceof Error) {
+        alert('Error: ' + err.message);
+      } else {
+        alert('Unknown error occurred');
+      }
+    }finally {
       setIsSubmitting(false);
     }
   };
