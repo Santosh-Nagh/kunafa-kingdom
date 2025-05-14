@@ -71,7 +71,8 @@ function OrderPage() {
       } else {
         alert('Unknown error occurred');
       }
-    }finally {
+    }
+    finally {
       setIsSubmitting(false);
     }
   };
