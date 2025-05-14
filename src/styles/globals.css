@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
   background-color: #f9fafb;
   color: #1f2937; /* Gray-800 */
