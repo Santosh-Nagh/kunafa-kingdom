@@ -1,5 +1,3 @@
-// src/pages/api/stores.ts
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../../lib/prisma';
 
@@ -9,8 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       orderBy: { name: 'asc' },
     });
     res.status(200).json(stores);
-  } catch (error) {
-    console.error('API /stores error:', error);
-    res.status(500).json({ error: 'Failed to load stores' });
+  } catch (error: any) {
+    console.error('🔥 /api/stores error:', error);
+
+    // Try to expose real error message in response
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Unknown error occurred.' });
+    }
   }
 }
