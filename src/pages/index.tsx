@@ -1,6 +1,4 @@
-cat << 'EOF' > src/pages/index.tsx
 // src/pages/index.tsx
-import { useEffect, useState } from "react";
 import { OrderProvider } from "../context/OrderContext";
 import StoreSelector from "../components/StoreSelector";
 import ProductList from "../components/ProductList";
@@ -55,4 +53,3 @@ export default function Home() {
     </OrderProvider>
   );
 }
-EOF
