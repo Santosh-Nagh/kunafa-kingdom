@@ -1,6 +1,6 @@
 // src/context/OrderContext.tsx
 
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 
 export type OrderItem = {
   variantId: string;
@@ -68,7 +68,7 @@ const initialState: OrderState = {
 function reducer(state: OrderState, action: OrderAction): OrderState {
   switch (action.type) {
     case 'SET_STORE':
-      return { ...initialState, storeId: action.payload }; // reset everything when store changes
+      return { ...initialState, storeId: action.payload };
     case 'ADD_ITEM': {
       const exists = state.items.find(item => item.variantId === action.payload.variantId);
       if (exists) {
@@ -133,7 +133,7 @@ function reducer(state: OrderState, action: OrderAction): OrderState {
     case 'SET_NOTES':
       return { ...state, notes: action.payload };
     case 'RESET_ORDER':
-      return { ...initialState, storeId: state.storeId }; // keep store
+      return { ...initialState, storeId: state.storeId };
     default:
       return state;
   }
@@ -157,3 +157,5 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     </OrderContext.Provider>
   );
 };
+
+export default OrderProvider;
