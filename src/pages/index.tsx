@@ -1,6 +1,6 @@
 // src/pages/index.tsx
 import { useEffect, useState } from "react";
-import { OrderContextProvider } from "../context/OrderContext";
+import OrderContextProvider from "../context/OrderContext";
 import StoreSelector from "../components/StoreSelector";
 import ProductList from "../components/ProductList";
 import OptionalDetails from "../components/OptionalDetails";
